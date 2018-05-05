@@ -6,6 +6,8 @@ Learned that I'm good at killing my own motivation to do things by over amplifyi
 
 This will become a full fledged game in the future, but one step at a time, ey?
 
+Not open for contributions until I pass the tech demo part.
+
 ## Achieving 'Tech Demo Status'
 
 ### Phase 1: The bones
@@ -43,4 +45,3 @@ This will become a full fledged game in the future, but one step at a time, ey?
 5. Npcs monster types will exist in a database
 6. NPC monsters will be selected from the monster database to participate in 'campaign battles'
 7. Campaign events can be progressed through cause and effect like choices that have a randomized variety.
-
