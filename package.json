@@ -1,0 +1,22 @@
+{
+  "name": "project-siera",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+		"run": "node server.js",
+		"dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/p-shannon/project-siera.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongodb": "^3.0.7"
+  }
+}
