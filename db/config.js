@@ -8,7 +8,9 @@ Mongo.client = require('mongodb').MongoClient;
 Mongo.objectId = require('mongodb').ObjectID;
 //And specify the URl
 //TODO: We want to provide an option to set this from a dotenv file
-Mongo.url = 'mongodb://localhost:27017/psg';
+Mongo.url = 'mongodb://localhost:27017';
+//and the database name
+Mongo.name = 'psg';
 
 //That's it! Export the file
 module.exports = Mongo;
