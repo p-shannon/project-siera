@@ -7,22 +7,42 @@ const Mob = {};
 //Finding all mobs
 Mob.findAll = () => {
 	return db.client.connect(db.url)
-	.then(transaction => {
-		let doc = transaction.db(db.name);
-		return doc.collection('mobs')
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('mobs')
 		.find({})
 		.toArray()
 		.then(response => {
-			console.log('FindAll()');
+			console.log('Mob.findAll()');
 			console.log(response);
 			return response;
 		})
 		.then(response => {
-			transaction.close();
+			connection.close();
 			return response;
 		})
 	});
 }
 
+//Creating one mob
+Mob.create = (mob) => {
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = tranaction.db(db.name);
+		return selectedDb.collection('mobs')
+		.insertOne(mob)
+		.then(response => {
+			//TODO: dry this shit up
+			console.log('Mob.create()');
+			console.log(response.ops[0]);
+			return response;
+		})
+		.then(response => {
+			//TODO: this too
+			connection.close();
+			return response;
+		})
+	});
+}
 ////Export for usage by other files
 module.exports = Mob;
