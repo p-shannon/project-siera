@@ -30,7 +30,7 @@ server.use('/mob', mobRoutes);
 server.use('*', (req,res)=>{
 	res.status(404)
 	.json({
-		message: "Error, resource does not exist!"
+		message: "Error, resource does not exist!",
 		status: res.status
 	})
 });
