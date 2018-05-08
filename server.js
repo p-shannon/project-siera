@@ -20,8 +20,17 @@ server.listen(PORT, ()=>{
 });
 
 ////Routing
+///Mob routing
+//Importthe mob routes
+const mobRoutes = require('./routes/mob-routes');
+//all requests to "/mob" will be forwarded to the mobRouter
+server.use('/mob', mobRoutes);
+
 //Handle 404s
 server.use('*', (req,res)=>{
-	//FIXME: Make this better!
-	res.send("404")
+	res.status(404)
+	.json({
+		message: "Error, resource does not exist!"
+		status: res.status
+	})
 });
