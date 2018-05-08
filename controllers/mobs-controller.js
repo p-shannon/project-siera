@@ -4,17 +4,37 @@ const Mob = require('../models/mob.js');
 ////Create the mobsController object
 const mobsController = {};
 
+//Error handler
+mobsController.errorHandler = (error) => {
+	console.log(err);
+	throw(err);
+}
+
 //show all mobs
 mobsController.index = (req, res) => {
 	Mob.findAll()
 	.then(mobs => {
 		res.status(200)
-		.send({
+		.json({
 			message: "Mobs retrieved successfully!",
 			mobs: mobs
 		})
-	}).catch(err => {
-		console.log(err);
-		throw(err);
 	})
+	.catch(err => mobsController.errorHandler(err))
 };
+
+//create a mob
+mobsController.create = (req, res) => {
+	Mob.create(req.body)
+	.then(mob => {
+		res.status(201)
+		.json({
+			message: "Mob created successfully!",
+			mob: mob
+		})
+	})
+	.catch(err => mobsController.errorHandler(err))
+};
+
+//Export the file
+module.exports = mobsController
