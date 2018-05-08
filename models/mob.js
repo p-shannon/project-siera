@@ -29,14 +29,14 @@ Mob.findAll = function(){
 Mob.create = function(mob){
 	return db.client.connect(db.url)
 	.then(connection => {
-		let selectedDb = tranaction.db(db.name);
+		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.insertOne(mob)
 		.then(response => {
 			//TODO: dry this shit up
 			console.log('Mob.create()');
 			console.log(response.ops[0]);
-			return response;
+			return response.ops[0];
 		})
 		.then(response => {
 			//TODO: this too

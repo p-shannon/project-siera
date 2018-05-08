@@ -6,8 +6,8 @@ const mobsController = {};
 
 //Error handler
 mobsController.errorHandler = function(error){
-	console.log(err);
-	throw(err);
+	console.log(error);
+	throw(error);
 }
 
 //show all mobs
