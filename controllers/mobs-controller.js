@@ -5,13 +5,13 @@ const Mob = require('../models/mob.js');
 const mobsController = {};
 
 //Error handler
-mobsController.errorHandler = (error) => {
+mobsController.errorHandler = function(error){
 	console.log(err);
 	throw(err);
 }
 
 //show all mobs
-mobsController.index = (req, res) => {
+mobsController.index = function(req, res){
 	Mob.findAll()
 	.then(mobs => {
 		res.status(200)
@@ -24,7 +24,7 @@ mobsController.index = (req, res) => {
 };
 
 //create a mob
-mobsController.create = (req, res) => {
+mobsController.create = function(req, res){
 	Mob.create(req.body)
 	.then(mob => {
 		res.status(201)

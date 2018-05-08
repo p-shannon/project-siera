@@ -5,7 +5,7 @@ const db = require('../db/config');
 const Mob = {};
 
 //Finding all mobs
-Mob.findAll = () => {
+Mob.findAll = function(){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
@@ -26,7 +26,7 @@ Mob.findAll = () => {
 }
 
 //Creating one mob
-Mob.create = (mob) => {
+Mob.create = function(mob){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = tranaction.db(db.name);
