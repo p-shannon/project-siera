@@ -18,7 +18,7 @@ db.createCollection('mobs', {
 				attribute: {
 					bsonType: "object",
 					required: [ "health", "living", "strength", "agility", "intelligence", "mana", "stamina", "max" ],
-					properties: 
+					properties: {
 						health: {
 							bsonType: "int",
 							description: "The number of health points the character has. <INTEGER> [REQUIRED]",
@@ -92,9 +92,15 @@ db.createCollection('mobs', {
 					},
 				flavor: {
 					bsonType: "object",
-					description: "Contains properties that describe various aspect of the character's appearance and demeanor. <OBJECT>
-				}
+					description: "Contains properties that describe various aspect of the character's appearance and demeanor. <OBJECT> [REQUIRED]"
+				},
+				action: {
+					bsonType: "object",
+					description: "Contains properties that indicate actions this character is capable of. <OBJECT> [REQUIRED]"
+				},
+			additionalProperties: false
 			}
 		}
 	}
 }
+});
