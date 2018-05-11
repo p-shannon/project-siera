@@ -21,10 +21,67 @@ db.createCollection('mobs', {
 				},
 				attribute: {
 					bsonType: "object",
+					required: ["living", "health", "mana", "stamina", "strength", "agility", "intelligence", "max"],
 					description: "The object containing various values representing the character's abilites. <OBJECT> [REQUIRED]",
 					properties: {
-						test: {
-							bsonType: "bool"
+						living: {
+							bsonType: "bool",
+							desciption: "Indicates whether a character is active and playable. <BOOLEAN> [REQUIRED]",
+						},
+						health: {
+							bsonType: "int",
+							description: "A value indicating the livelyhood of a character. <INTEGER> [REQUIRED]",
+						},
+						mana: {
+							bsonType: "int",
+							description: "A value indicating the magical reserves of a character. <INTEGER> [REQUIRED]",
+						},
+						stamina: {
+							bsonType: "int",
+							description: "A value indicating the energy reserves of a character. <INTEGER> [REQUIRED]",
+						},
+						strength: {
+							bsonType: "int",
+							description: "A value indicating the brawn of a character. <INTEGER> [REQUIRED]",
+						},
+						agility: {
+							bsonType: "int",
+							description: "A value indicating the reflexes of a character. <INTEGER> [REQUIRED]",
+						},
+						intelligence: {
+							bsonType: "int",
+							description: "A value indicating the wit of a character. <INTEGER> [REQUIRED]",
+						},
+						max: {
+							bsonType: "object",
+							description: "An object holding properties representing the maximum values of a given attribute. <OBJECT> [REQUIRED]",
+							required: ["health", "mana", "stamina", "strength", "agility", "intelligence"],
+							properties: {
+								health: {
+									bsonType: "int",
+									description: "A value indicating the livelyhood of a character. <INTEGER> [REQUIRED]",
+								},
+								mana: {
+									bsonType: "int",
+									description: "A value indicating the magical reserves of a character. <INTEGER> [REQUIRED]",
+								},
+								stamina: {
+									bsonType: "int",
+									description: "A value indicating the energy reserves of a character. <INTEGER> [REQUIRED]",
+								},
+								strength: {
+									bsonType: "int",
+									description: "A value indicating the brawn of a character. <INTEGER> [REQUIRED]",
+								},
+								agility: {
+									bsonType: "int",
+									description: "A value indicating the reflexes of a character. <INTEGER> [REQUIRED]",
+								},
+								intelligence: {
+									bsonType: "int",
+									description: "A value indicating the wit of a character. <INTEGER> [REQUIRED]",
+								}
+							}
 						}
 					}
 				},
