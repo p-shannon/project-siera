@@ -4,11 +4,11 @@ const Mob = require('../models/mob.js');
 ////Create the mobsController object
 const mobsController = {};
 
-//Error handler
-mobsController.errorHandler = function(error){
-	console.log(error);
-	throw(error);
-}
+//Error handler XXX: DOESN'T WORK
+//mobsController.errorHandler = function(error){
+//	console.log(error);
+//	throw(error);
+//}
 
 //show all mobs
 mobsController.index = function(req, res){
@@ -20,7 +20,10 @@ mobsController.index = function(req, res){
 			mobs: mobs
 		})
 	})
-	.catch(err => mobsController.errorHandler(err))
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({err});
+	})
 };
 
 //create a mob
@@ -33,7 +36,11 @@ mobsController.create = function(req, res){
 			mob: mob
 		})
 	})
-	.catch(err => mobsController.errorHandler(err))
+	.catch(err => {
+		console.log(err);
+		console.log(req.body);
+		res.status(500).json({err});
+	})
 };
 
 //Export the file
