@@ -21,6 +21,7 @@ db.createCollection('mobs', {
 				},
 				attribute: {
 					bsonType: "object",
+					additionalProperties: false,
 					required: ["living", "health", "mana", "stamina", "strength", "agility", "intelligence", "max"],
 					description: "The object containing various values representing the character's abilites. <OBJECT> [REQUIRED]",
 					properties: {
@@ -54,6 +55,7 @@ db.createCollection('mobs', {
 						},
 						max: {
 							bsonType: "object",
+							additionalProperties: false,
 							description: "An object holding properties representing the maximum values of a given attribute. <OBJECT> [REQUIRED]",
 							required: ["health", "mana", "stamina", "strength", "agility", "intelligence"],
 							properties: {
