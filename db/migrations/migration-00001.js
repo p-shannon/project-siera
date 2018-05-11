@@ -88,20 +88,10 @@ db.createCollection('mobs', {
 				flavor: {
 					bsonType: "object",
 					description: "The object containing various properties describing the character's demeanor and visage. <OBJECT> [REQUIRED]",
-					properties: {
-						test: {
-							bsonType: "bool"
-						}
-					}
 				},
 				action: {
 					bsonType: "object",
 					description: "The object containing properties indicating the various actions they may perform. <OBJECT> [REQUIRED]",
-					properties: {
-						test: {
-							bsonType: "bool"
-						}
-					}
 				}
 			}
 		},
