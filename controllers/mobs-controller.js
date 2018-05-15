@@ -43,5 +43,21 @@ mobsController.create = function(req, res){
 	})
 };
 
+//update a mob
+//TODO: Include logic to prevent updates outside of the flavor property
+mobsController.update = function(req, res){
+	Mob.update(req.params.id, req.body.property, req.body.newValue)
+	.then(response => {
+		res.status(200)
+		.json({
+			message: "Mob updated successfully!",
+			response
+		})
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({err});
+	})
+};
+
 //Export the file
 module.exports = mobsController
