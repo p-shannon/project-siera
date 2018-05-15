@@ -11,8 +11,8 @@ mobRoutes.get('/', mobsController.index);
 //Create single
 mobRoutes.post('/', mobsController.create);
 
-//Update single
-mobRoutes.put('/:id', mobsController.update);
+//Update single flavor
+mobRoutes.put('/:id/flavor', mobsController.updateFlavor);
 
 ////Export it
 module.exports = mobRoutes
