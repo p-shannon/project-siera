@@ -41,10 +41,12 @@ mobsController.create = function(req, res){
 	})
 };
 
-//update a mob
+///update a mob
+//the flavor text
 //TODO: Include logic to prevent updates outside of the flavor property
-mobsController.update = function(req, res){
-	Mob.update(req.params.id, req.body.property, req.body.newValue)
+mobsController.updateFlavor = function(req, res){
+	let targetProperty = "flavor." + req.body.property;
+	Mob.update(req.params.id, targetProperty, req.body.newValue)
 	.then(response => {
 		res.status(200)
 		.json({
