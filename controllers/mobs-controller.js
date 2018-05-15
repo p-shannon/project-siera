@@ -19,8 +19,7 @@ mobsController.index = function(req, res){
 			message: "Mobs retrieved successfully!",
 			mobs: mobs
 		})
-	})
-	.catch(err => {
+	}).catch(err => {
 		console.log(err);
 		res.status(500).json({err});
 	})
@@ -35,8 +34,7 @@ mobsController.create = function(req, res){
 			message: "Mob created successfully!",
 			mob: mob
 		})
-	})
-	.catch(err => {
+	}).catch(err => {
 		console.log(err);
 		console.log(req.body);
 		res.status(500).json({err});
