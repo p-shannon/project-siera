@@ -45,5 +45,13 @@ Mob.create = function(mob){
 		})
 	});
 }
+
+//Updating one mob
+Mob.update = function(mob, id){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('mobs')
+		//TODO: Find the mob, and update the mob.
 ////Export for usage by other files
 module.exports = Mob;
