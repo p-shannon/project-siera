@@ -47,11 +47,23 @@ Mob.create = function(mob){
 }
 
 //Updating one mob
-Mob.update = function(mob, id){
+Mob.update = function(id, property, newValue){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
-		//TODO: Find the mob, and update the mob.
+		.updateOne(
+			{ "_id" : db.objectId.createFromHexString(id) },
+			{ $set: { [property] : newValue } }
+		).then(response => {
+			console.log('Mob.update()');
+			console.log(response);
+			return response;
+		}).then(response => {
+			connection.close();
+			return response;
+		})
+	});
+}
 ////Export for usage by other files
 module.exports = Mob;
