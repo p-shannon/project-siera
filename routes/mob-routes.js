@@ -11,5 +11,8 @@ mobRoutes.get('/', mobsController.index);
 //Create single
 mobRoutes.post('/', mobsController.create);
 
+//Update single
+mobRoutes.put('/:id', mobsController.update);
+
 ////Export it
 module.exports = mobRoutes
