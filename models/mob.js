@@ -16,8 +16,7 @@ Mob.findAll = function(){
 			console.log('Mob.findAll()');
 			console.log(response);
 			return response;
-		})
-		.then(response => {
+		}).then(response => {
 			connection.close();
 			return response;
 		})
@@ -37,8 +36,7 @@ Mob.create = function(mob){
 			console.log('Mob.create()');
 			console.log(response.ops[0]);
 			return response.ops[0];
-		})
-		.then(response => {
+		}).then(response => {
 			//TODO: this too
 			connection.close();
 			return response;
