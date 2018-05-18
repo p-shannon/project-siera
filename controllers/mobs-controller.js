@@ -43,22 +43,33 @@ mobsController.create = function(req, res){
 
 ///update a mob
 //the flavor text
-//TODO: add fail safes to prevent undefined:nulls
 mobsController.updateFlavor = function(req, res){
 	let flavorProperty = `flavor.${req.body.property}`;
 	console.log(`DEBUG: body.property=${req.body.property}`);
 	console.log(`DEBUG: targetProperty=${flavorProperty}`);
-	Mob.update(req.params.id, flavorProperty, req.body.newValue)
-	.then(response => {
-		res.status(200)//
-		.json({
-			message: "Mob updated successfully!",
-			response
+	if (req.body.flavorProperty){
+		Mob.update(req.params.id, flavorProperty, req.body.newValue)
+		.then(response => {
+			res.status(200)//
+			.json({
+				message: "Mob updated successfully!",
+				response
+			})
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({err});
 		})
-	}).catch(err => {
-		console.log(err);
-		res.status(500).json({err});
-	})
+	}
+	else{
+		res.status(400)
+		.json({
+			message: "Bad request",
+			additionalInformation: "Ensure that your request headers include 'Accept':'application/json' and 'Content-Type':'application/json'. \n Also ensure that your request body isn't empty, or that the value of the 'property' property isn't undefined."
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({err});
+		})
+	}
 };
 
 //Export the file
