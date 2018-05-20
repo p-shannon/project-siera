@@ -9,6 +9,7 @@ This will become a full fledged game in the future, but one step at a time, ey?
 Not open for contributions until I pass the tech demo part.
 
 ## Achieving 'Tech Demo Status'
+> [Project board](https://github.com/p-shannon/project-siera/projects/1)
 
 ### Phase 1: The bones
 1. The database server exists
