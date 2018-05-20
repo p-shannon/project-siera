@@ -47,7 +47,7 @@ mobsController.updateFlavor = function(req, res){
 	let flavorProperty = `flavor.${req.body.property}`;
 	console.log(`DEBUG: body.property=${req.body.property}`);
 	console.log(`DEBUG: targetProperty=${flavorProperty}`);
-	if (req.body.flavorProperty){
+	if (req.body.property){
 		Mob.update(req.params.id, flavorProperty, req.body.newValue)
 		.then(response => {
 			res.status(200)//
@@ -65,12 +65,14 @@ mobsController.updateFlavor = function(req, res){
 		.json({
 			message: "Bad request",
 			additionalInformation: "Ensure that your request headers include 'Accept':'application/json' and 'Content-Type':'application/json'. \n Also ensure that your request body isn't empty, or that the value of the 'property' property isn't undefined."
-		}).catch(err => {
-			console.log(err);
-			res.status(500).json({err});
 		})
 	}
 };
+
+//delete a flavorProperty
+mobsController.deleteFlavor = function(req, res){
+	//Might not be neccasary
+}
 
 //Export the file
 module.exports = mobsController

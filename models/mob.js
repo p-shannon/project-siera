@@ -49,18 +49,34 @@ Mob.update = function(id, property, newValue){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
-		return selectedDb.collection('mobs')
-		.updateOne(
-			{ "_id" : db.objectId.createFromHexString(id) },
-			{ $set: { [property] : newValue } }
-		).then(response => {
-			console.log('Mob.update()');
-			console.log(response);
-			return response;
-		}).then(response => {
-			connection.close();
-			return response;
-		})
+		if (newValue) {
+			return selectedDb.collection('mobs')
+			.updateOne(
+				{ "_id" : db.objectId.createFromHexString(id) },
+				{ $set: { [property] : newValue } }
+			).then(response => {
+				console.log('Mob.update()');
+				console.log(response);
+				return response;
+			}).then(response => {
+				connection.close();
+				return response;
+			})
+		}
+		else{
+			return selectedDb.collection('mobs')
+			.updateOne(
+				{ "_id" : db.objectId.createFromHexString(id) },
+				{ $unset: { [property] : 1 } }
+			).then(response => {
+				console.log('Mob.update()');
+				console.log(response);
+				return response;
+			}).then(response => {
+				connection.close();
+				return response;
+			})
+		}
 	});
 }
 ////Export for usage by other files
