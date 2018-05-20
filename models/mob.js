@@ -16,8 +16,7 @@ Mob.findAll = function(){
 			console.log('Mob.findAll()');
 			console.log(response);
 			return response;
-		})
-		.then(response => {
+		}).then(response => {
 			connection.close();
 			return response;
 		})
@@ -37,12 +36,47 @@ Mob.create = function(mob){
 			console.log('Mob.create()');
 			console.log(response.ops[0]);
 			return response.ops[0];
-		})
-		.then(response => {
+		}).then(response => {
 			//TODO: this too
 			connection.close();
 			return response;
 		})
+	});
+}
+
+//Updating one mob
+Mob.update = function(id, property, newValue){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		if (newValue) {
+			return selectedDb.collection('mobs')
+			.updateOne(
+				{ "_id" : db.objectId.createFromHexString(id) },
+				{ $set: { [property] : newValue } }
+			).then(response => {
+				console.log('Mob.update()');
+				console.log(response);
+				return response;
+			}).then(response => {
+				connection.close();
+				return response;
+			})
+		}
+		else{
+			return selectedDb.collection('mobs')
+			.updateOne(
+				{ "_id" : db.objectId.createFromHexString(id) },
+				{ $unset: { [property] : 1 } }
+			).then(response => {
+				console.log('Mob.update()');
+				console.log(response);
+				return response;
+			}).then(response => {
+				connection.close();
+				return response;
+			})
+		}
 	});
 }
 ////Export for usage by other files
