@@ -16,7 +16,7 @@ mobsController.index = function(req, res){
 	.then(mobs => {
 		res.status(200)
 		.json({
-			message: "Mobs retrieved successfully!",
+			message: "Mob index retrieved successfully!",
 			mobs: mobs
 		})
 	}).catch(err => {
