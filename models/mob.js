@@ -11,7 +11,10 @@ Mob.findAll = function(){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.find({})
-		.toArray()
+		.project({
+			"name": 1,
+			"flavor": 1
+		}).toArray()
 		.then(response => {
 			console.log('Mob.findAll()');
 			console.log(response);
