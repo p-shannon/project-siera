@@ -51,9 +51,10 @@ Mob.update = function(id, property, newValue){
 		let selectedDb = connection.db(db.name);
 		if (newValue) {
 			return selectedDb.collection('mobs')
-			.updateOne(
-				{ "_id" : db.objectId.createFromHexString(id) },
-				{ $set: { [property] : newValue } }
+			.findOneAndUpdate(
+				{ "_id": db.objectId.createFromHexString(id) },
+				{ $set: { [property] : newValue } },
+				{ returnOriginal: false }
 			).then(response => {
 				console.log('Mob.update()');
 				console.log(response);
@@ -65,9 +66,10 @@ Mob.update = function(id, property, newValue){
 		}
 		else{
 			return selectedDb.collection('mobs')
-			.updateOne(
-				{ "_id" : db.objectId.createFromHexString(id) },
-				{ $unset: { [property] : 1 } }
+			.findOneAndUpdate(
+				{ "_id": db.objectId.createFromHexString(id) },
+				{ $unset: { [property] : 1 } },
+				{ returnOriginal: false }
 			).then(response => {
 				console.log('Mob.update()');
 				console.log(response);
