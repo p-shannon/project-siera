@@ -27,6 +27,25 @@ Mob.findAll = function(){
 	});
 }
 
+//Finding a single mob by ID
+Mob.findById = function(id){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('mobs')
+		.findOne({"_id": db.objectId.createFromHexString(id)})
+		.then(response => {
+			console.log('Mob.findById()');
+			console.log(response);
+			return response;
+		}).then(response => {
+			connection.close();
+			return response;
+		})
+		//TODO: Throw some error handlers in here.
+	});
+}
+
 //Creating one mob
 Mob.create = function(mob){
 	return db.client.connect(db.url)
