@@ -11,9 +11,31 @@ Mob.findAll = function(){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.find({})
-		.toArray()
+		.project({
+			"name": 1,
+			"flavor": 1
+		}).toArray()
 		.then(response => {
 			console.log('Mob.findAll()');
+			console.log(response);
+			return response;
+		}).then(response => {
+			connection.close();
+			return response;
+		})
+		//TODO: Throw some error handlers in here.
+	});
+}
+
+//Finding a single mob by ID
+Mob.findById = function(id){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('mobs')
+		.findOne({"_id": db.objectId.createFromHexString(id)})
+		.then(response => {
+			console.log('Mob.findById()');
 			console.log(response);
 			return response;
 		}).then(response => {
@@ -51,9 +73,10 @@ Mob.update = function(id, property, newValue){
 		let selectedDb = connection.db(db.name);
 		if (newValue) {
 			return selectedDb.collection('mobs')
-			.updateOne(
-				{ "_id" : db.objectId.createFromHexString(id) },
-				{ $set: { [property] : newValue } }
+			.findOneAndUpdate(
+				{ "_id": db.objectId.createFromHexString(id) },
+				{ $set: { [property] : newValue } },
+				{ returnOriginal: false }
 			).then(response => {
 				console.log('Mob.update()');
 				console.log(response);
@@ -65,9 +88,10 @@ Mob.update = function(id, property, newValue){
 		}
 		else{
 			return selectedDb.collection('mobs')
-			.updateOne(
-				{ "_id" : db.objectId.createFromHexString(id) },
-				{ $unset: { [property] : 1 } }
+			.findOneAndUpdate(
+				{ "_id": db.objectId.createFromHexString(id) },
+				{ $unset: { [property] : 1 } },
+				{ returnOriginal: false }
 			).then(response => {
 				console.log('Mob.update()');
 				console.log(response);

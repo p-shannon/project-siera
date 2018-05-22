@@ -11,6 +11,9 @@ mobRoutes.get('/', mobsController.index);
 //Create single
 mobRoutes.post('/', mobsController.create);
 
+//Get single
+mobRoutes.get('/:id', mobsController.show);
+
 //Update single flavor
 mobRoutes.put('/:id/flavor', mobsController.updateFlavor);
 

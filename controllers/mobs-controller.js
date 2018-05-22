@@ -16,8 +16,23 @@ mobsController.index = function(req, res){
 	.then(mobs => {
 		res.status(200)
 		.json({
-			message: "Mobs retrieved successfully!",
+			message: "Mob index retrieved successfully!",
 			mobs: mobs
+		})
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({err});
+	})
+};
+
+//show a single mob
+mobsController.show = function(req, res){
+	Mob.findById(req.params.id)
+	.then(mob => {
+		res.status(200)
+		.json({
+			message: "Mob retrieved successfully!",
+			mob
 		})
 	}).catch(err => {
 		console.log(err);
@@ -52,8 +67,12 @@ mobsController.updateFlavor = function(req, res){
 		.then(response => {
 			res.status(200)//
 			.json({
-				message: "Mob updated successfully!",
-				response
+				message: "Mob flavor updated successfully!",
+				mob: {
+					_id: response.value._id,
+					name: response.value.name,
+					flavor: response.value.flavor
+				}
 			})
 		}).catch(err => {
 			console.log(err);
