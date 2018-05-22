@@ -25,6 +25,21 @@ mobsController.index = function(req, res){
 	})
 };
 
+//show a single mob
+mobsController.show = function(req, res){
+	Mob.findById(req.params.id)
+	.then(mob => {
+		res.status(200)
+		.json({
+			message: "Mob retrieved successfully!",
+			mob
+		})
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({err});
+	})
+};
+
 //create a mob
 mobsController.create = function(req, res){
 	Mob.create(req.body)
