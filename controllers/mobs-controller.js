@@ -53,7 +53,11 @@ mobsController.updateFlavor = function(req, res){
 			res.status(200)//
 			.json({
 				message: "Mob flavor updated successfully!",
-				mob: response.value
+				mob: {
+					_id: response.value._id,
+					name: response.value.name,
+					flavor: response.value.flavor
+				}
 			})
 		}).catch(err => {
 			console.log(err);
