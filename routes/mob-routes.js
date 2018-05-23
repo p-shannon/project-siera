@@ -14,6 +14,9 @@ mobRoutes.post('/', mobsController.create);
 //Get single
 mobRoutes.get('/:id', mobsController.show);
 
+//XXX TEMPORARY
+mobRoutes.put('/:attacker/attack/:defender', require('../controllers/game-controller').attack);
+
 //Update single flavor
 mobRoutes.put('/:id/flavor', mobsController.updateFlavor);
 
