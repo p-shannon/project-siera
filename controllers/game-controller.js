@@ -8,11 +8,16 @@ const gameController = {};
 gameController.attack = function(req, res){
 	Promise.all([Mob.findById(req.params.attacker),Mob.findById(req.params.defender)])
 	.then(mobs => {
-		res.status(200)
-		.json({
-			message: "WHOOP",
-			attacker: mobs[0],
-			defender: mobs[1]
+		let remainingHealth = mobs[1].attribute.health - mobs[0].attribute.strength;
+		return Mob.update(req.params.defender,"attribute.health",remainingHealth)
+		.then(newMob => {
+			res.status(200)
+			.json({
+				message: "Attack completed successfully!",
+				log: `${mobs[0].name} attacks ${mobs[1].name} for ${mobs[0].attribute.strength} damage.`,
+				attacker: mobs[0],
+				defender: newMob.value
+			})
 		})
 	})
 	.catch(err => {
