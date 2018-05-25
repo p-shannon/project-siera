@@ -14,6 +14,9 @@ db.createCollection('logs', {
 				timestamp: {
 					bsonType: "int"
 				},
+				type: {
+					bsonType: "string"
+				},
 				room: {
 					bsonType: "string"
 				},
