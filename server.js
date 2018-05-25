@@ -27,6 +27,9 @@ const mobRoutes = require('./routes/mob-routes');
 //all requests to "/mob" will be forwarded to the mobRouter
 server.use('/mob', mobRoutes);
 
+//"/action"
+server.use('/action', require('./routes/action-routes'));
+
 //Root
 server.use('/', (req, res) => {
 	res.status(200).json({
