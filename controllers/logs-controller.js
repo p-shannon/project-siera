@@ -8,31 +8,14 @@ const Log = require('../models/log');
 const logsController = {};
 
 ////Give it logic
-//attacking
-
-logsController.attack = function(req, res){
-	Promise.all([Mob.findById(req.params.attacker),Mob.findById(req.params.defender)])
-	.then(mobs => {
-		let remainingHealth = mobs[1].attribute.health - mobs[0].attribute.strength;
-		return Mob.update(req.params.defender,"attribute.health",remainingHealth)
-		.then(newMob => {
-			let newLog = {
-				content: `${mobs[0].name} attacks ${mobs[1].name} for ${mobs[0].attribute.strength} damage. ** ${mobs[0]._id} =${mobs[0].attribute.strength}=> ${mobs[1]._id} **`,
-				timestamp: Date.now(),
-				type: "action",
-				//TODO: update this to include involved room
-				room: null
-			}
-			return Log.create(newLog)
-			.then(logResponse => {
-				res.status(200)
-				.json({
-					message: "Attack completed successfully!",
-					log: logResponse,
-					attacker: mobs[0],
-					defender: newMob.value
-				})
-			})
+//index
+logsController.index = function(req, res){
+	Log.findAll()
+	.then(logs => {
+		res.status(200)
+		.json({
+			message: "Logs retrieved successfully!",
+			logs
 		})
 	})
 	.catch(err => {
@@ -41,4 +24,5 @@ logsController.attack = function(req, res){
 	})
 }
 
+////Export it.
 module.exports = logsController;
