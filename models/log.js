@@ -5,12 +5,17 @@ const db = require('../db/config');
 const Log = {};
 
 //Finding all logs
-Log.findAll = function(){
+Log.findAll = function(maxResults){
+	if (maxResults == undefined){
+		maxResults = 5;
+	}
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('logs')
 		.find({})
+		.sort({timestamp: -1})
+		.limit(maxResults)
 		.toArray()
 		.then(response => {
 			console.log('Log.findAll()');
