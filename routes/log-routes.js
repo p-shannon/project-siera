@@ -5,8 +5,11 @@ const logsController = require('../controllers/logs-controller');
 const logRoutes = require('express').Router();
 
 ////Set up the routes
-//index
+//index default
 logRoutes.get('/', logsController.index);
+
+//index quantity
+logRoutes.get('/quant/:number', logsController.index);
 
 ////Export it
 module.exports = logRoutes
