@@ -6,7 +6,7 @@ const Log = {};
 
 //Finding all logs
 Log.findAll = function(maxResults){
-	if (maxResults == undefined){
+	if (maxResults === undefined){
 		maxResults = 5;
 	}
 	return db.client.connect(db.url)
@@ -28,7 +28,7 @@ Log.findAll = function(maxResults){
 	});
 }
 
-//TODO: Add a method to return n number of logs sorted by timestamp
+//TODO: Add pagination. This is a tech demo, limitSkip should do fine. However, keep objectIdSkip in mind.
 
 //Finding a single log by ID (Will likely see little use)
 Log.findById = function(id){
