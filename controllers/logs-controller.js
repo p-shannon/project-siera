@@ -10,7 +10,11 @@ const logsController = {};
 ////Give it logic
 //index
 logsController.index = function(req, res){
-	Log.findAll()
+	let quantity = 5;
+	if (req.params.number !== undefined){
+		quantity = Number(req.params.number);
+	}
+	Log.findAll(quantity)
 	.then(logs => {
 		res.status(200)
 		.json({
