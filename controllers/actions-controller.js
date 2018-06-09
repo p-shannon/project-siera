@@ -48,7 +48,7 @@ actionsController.attack = function(req, res){
 		return Mob.takeDamage(req.params.defender, attacker.attribute.strength)
 		.then(defender => {
 			let newLog = {
-				content: "It fuckin' worked and the defender.living is..." + defender.value.attribute.living,
+				content: `${attacker.name} attacks ${defender.value.name} for ${attacker.attribute.strength} damage! // ${attacker._id} =${attacker.attribute.strength}=> ${defender.value._id} //`,
 				timestamp: Date.now(),
 				type: "action",
 				room: null
