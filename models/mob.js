@@ -117,6 +117,9 @@ Mob.takeDamage = function(id, damage){
 			if (target.attribute.health < damage){
 				updateInstructions['attribute.living'] = false;
 			}
+			else {
+				updateInstructions['attribute.living'] = true;
+			}
 			updateInstructions['attribute.health'] = target.attribute.health - damage;
 			return selectedDb.collection('mobs')
 			.findOneAndUpdate(
