@@ -103,5 +103,40 @@ Mob.update = function(id, property, newValue){
 		}
 	});
 }
+
+///combat functions
+//taking damage
+Mob.takeDamage = function(id, damage){
+	return db.client.connect(db.url)
+ 	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('mobs')
+		.findOne({"_id": db.objectId.createFromHexString(id)})
+		.then(target => {
+			let updateInstructions = {};
+			if (target.attribute.health < damage){
+				updateInstructions['attribute.living'] = false;
+			}
+			else {
+				updateInstructions['attribute.living'] = true;
+			}
+			updateInstructions['attribute.health'] = target.attribute.health - damage;
+			return selectedDb.collection('mobs')
+			.findOneAndUpdate(
+				{ "_id": db.objectId.createFromHexString(id) },
+				{ $set: updateInstructions },
+				{ returnOriginal: false }
+			).then(response => {
+				console.log('Mob.takeDamage()');
+				console.log(response);
+				return response;
+			}).then(response => {
+				connection.close();
+				return response;
+			})
+		})
+	})
+}
+
 ////Export for usage by other files
 module.exports = Mob;
