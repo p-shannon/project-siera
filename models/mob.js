@@ -25,7 +25,7 @@ Mob.findAll = function(){
 			"name": 1,
 			"flavor": 1
 		}).toArray()
-		.then(response => Mob.serverLog('Mob.findAll',response))
+		.then(response => Mob.serverLog('Mob.findAll', response))
 		.then(response => {
 			connection.close();
 			return response;
@@ -41,11 +41,8 @@ Mob.findById = function(id){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.findOne({"_id": db.objectId.createFromHexString(id)})
+		.then(response => Mob.serverLog('Mob.findById', response))
 		.then(response => {
-			console.log('Mob.findById()');
-			console.log(response);
-			return response;
-		}).then(response => {
 			connection.close();
 			return response;
 		})
@@ -60,12 +57,8 @@ Mob.create = function(mob){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.insertOne(mob)
+		.then(response => Mob.serverLog('Mob.create', response.ops[0]))
 		.then(response => {
-			//TODO: dry this shit up
-			console.log('Mob.create()');
-			console.log(response.ops[0]);
-			return response.ops[0];
-		}).then(response => {
 			//TODO: this too
 			connection.close();
 			return response;
@@ -84,11 +77,8 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: { [property] : newValue } },
 				{ returnOriginal: false }
-			).then(response => {
-				console.log('Mob.update()');
-				console.log(response);
-				return response;
-			}).then(response => {
+			).then(response => Mob.serverLog('Mob.update', response))
+			.then(response => {
 				connection.close();
 				return response;
 			})
@@ -99,11 +89,8 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $unset: { [property] : 1 } },
 				{ returnOriginal: false }
-			).then(response => {
-				console.log('Mob.update()');
-				console.log(response);
-				return response;
-			}).then(response => {
+			).then(response => Mob.serverLog('Mob.update', response))
+			.then(response => {
 				connection.close();
 				return response;
 			})
@@ -133,11 +120,8 @@ Mob.takeDamage = function(id, damage){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: updateInstructions },
 				{ returnOriginal: false }
-			).then(response => {
-				console.log('Mob.takeDamage()');
-				console.log(response);
-				return response;
-			}).then(response => {
+			).then(response => Mob.serverLog('Mob.takeDamage', response))
+			.then(response => {
 				connection.close();
 				return response;
 			})
