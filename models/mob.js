@@ -4,6 +4,16 @@ const db = require('../db/config');
 ////Create the mob object
 const Mob = {};
 
+//Helper function for logging transactions
+Mob.serverLog = function(functionName, object){
+	let timestamp = new Date(Date.now());
+	console.log(`<< ${timestamp.toString()} >>`);
+	console.log(`//====== Begin ${functionName} transaction ======\\\\`);
+	console.log(object);
+	console.log(`\\\\======  End ${functionName} transaction  ======//`);
+	return object
+}
+
 //Finding all mobs
 Mob.findAll = function(){
 	return db.client.connect(db.url)
@@ -15,11 +25,8 @@ Mob.findAll = function(){
 			"name": 1,
 			"flavor": 1
 		}).toArray()
+		.then(response => Mob.serverLog('Mob.findAll',response))
 		.then(response => {
-			console.log('Mob.findAll()');
-			console.log(response);
-			return response;
-		}).then(response => {
 			connection.close();
 			return response;
 		})
