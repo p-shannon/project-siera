@@ -70,7 +70,7 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: { [property] : newValue } },
 				{ returnOriginal: false }
-			).then(response => modelHelper.serverLog('Mob.update', response))
+			).then(response => modelHelper.serverLog('Mob.update', response.value))
 			.then(response => {
 				connection.close();
 				return response;
@@ -82,7 +82,7 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $unset: { [property] : 1 } },
 				{ returnOriginal: false }
-			).then(response => modelHelper.serverLog('Mob.update', response))
+			).then(response => modelHelper.serverLog('Mob.update', response.value))
 			.then(response => {
 				connection.close();
 				return response;
