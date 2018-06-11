@@ -48,11 +48,11 @@ actionsController.attack = function(req, res){
 		return Mob.takeDamage(req.params.defender, attacker.attribute.strength)
 		.then(defender => {
 			let content = "";
-			if (defender.value.attribute.living){
-				content = `${attacker.name} attacks ${defender.value.name} for ${attacker.attribute.strength} damage! // ${attacker._id} =${attacker.attribute.strength}=> ${defender.value._id} //`;
+			if (defender.attribute.living){
+				content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage! // ${attacker._id} =${attacker.attribute.strength}=> ${defender._id} //`;
 			}
 			else {
-				content = `${attacker.name} attacks ${defender.value.name} for ${attacker.attribute.strength} damage, knocking them to the ground! // ${attacker._id} =x!${attacker.attribute.strength}!x=> ${defender.value._id} //`;
+				content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage, knocking them to the ground! // ${attacker._id} =x!${attacker.attribute.strength}!x=> ${defender._id} //`;
 			}
 			let newLog = {
 				content,
@@ -67,7 +67,7 @@ actionsController.attack = function(req, res){
 					message: "Attack completed successfully!",
 					log: logResponse,
 					attacker,
-					defender: defender.value
+					defender,
 				})
 			})
 		})
