@@ -1,6 +1,9 @@
 ////Import the database
 const db = require('../db/config');
 
+////Import the modelHelper object
+const modelHelper = require('./_model-helper');
+
 ////Create the log object
 const Log = {};
 
@@ -17,11 +20,8 @@ Log.findAll = function(maxResults){
 		.sort({timestamp: -1})
 		.limit(maxResults)
 		.toArray()
+		.then(response => modelHelper.serverLog('Log.findAll', response))
 		.then(response => {
-			console.log('Log.findAll()');
-			console.log(response);
-			return response;
-		}).then(response => {
 			connection.close();
 			return response;
 		})
@@ -37,11 +37,8 @@ Log.findById = function(id){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('logs')
 		.findOne({"_id": db.objectId.createFromHexString(id)})
+		.then(response => modelHelper.serverLog('Log.findById', response))
 		.then(response => {
-			console.log('Log.findById()');
-			console.log(response);
-			return response;
-		}).then(response => {
 			connection.close();
 			return response;
 		})
@@ -55,11 +52,8 @@ Log.create = function(log){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('logs')
 		.insertOne(log)
+		.then(response => modelHelper.serverLog('Log.create', response.ops[0]))
 		.then(response => {
-			console.log('Log.create()');
-			console.log(response.ops[0]);
-			return response.ops[0];
-		}).then(response => {
 			connection.close();
 			return response;
 		})
