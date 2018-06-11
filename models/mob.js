@@ -1,18 +1,11 @@
 ////Import the database
 const db = require('../db/config');
 
+////Import the modelHelper object
+const modelHelper = require('./_model-helper');
+
 ////Create the mob object
 const Mob = {};
-
-//Helper function for logging transactions
-Mob.serverLog = function(functionName, object){
-	let timestamp = new Date(Date.now());
-	console.log(`<< ${timestamp.toString()} >>`);
-	console.log(`//====== Begin ${functionName} transaction ======\\\\`);
-	console.log(object);
-	console.log(`\\\\======  End ${functionName} transaction  ======//`);
-	return object
-}
 
 //Finding all mobs
 Mob.findAll = function(){
@@ -25,7 +18,7 @@ Mob.findAll = function(){
 			"name": 1,
 			"flavor": 1
 		}).toArray()
-		.then(response => Mob.serverLog('Mob.findAll', response))
+		.then(response => modelHelper.serverLog('Mob.findAll', response))
 		.then(response => {
 			connection.close();
 			return response;
@@ -41,7 +34,7 @@ Mob.findById = function(id){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.findOne({"_id": db.objectId.createFromHexString(id)})
-		.then(response => Mob.serverLog('Mob.findById', response))
+		.then(response => modelHelper.serverLog('Mob.findById', response))
 		.then(response => {
 			connection.close();
 			return response;
@@ -57,7 +50,7 @@ Mob.create = function(mob){
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('mobs')
 		.insertOne(mob)
-		.then(response => Mob.serverLog('Mob.create', response.ops[0]))
+		.then(response => modelHelper.serverLog('Mob.create', response.ops[0]))
 		.then(response => {
 			//TODO: this too
 			connection.close();
@@ -77,7 +70,7 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: { [property] : newValue } },
 				{ returnOriginal: false }
-			).then(response => Mob.serverLog('Mob.update', response))
+			).then(response => modelHelper.serverLog('Mob.update', response))
 			.then(response => {
 				connection.close();
 				return response;
@@ -89,7 +82,7 @@ Mob.update = function(id, property, newValue){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $unset: { [property] : 1 } },
 				{ returnOriginal: false }
-			).then(response => Mob.serverLog('Mob.update', response))
+			).then(response => modelHelper.serverLog('Mob.update', response))
 			.then(response => {
 				connection.close();
 				return response;
@@ -120,7 +113,7 @@ Mob.takeDamage = function(id, damage){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: updateInstructions },
 				{ returnOriginal: false }
-			).then(response => Mob.serverLog('Mob.takeDamage', response))
+			).then(response => modelHelper.serverLog('Mob.takeDamage', response))
 			.then(response => {
 				connection.close();
 				return response;
