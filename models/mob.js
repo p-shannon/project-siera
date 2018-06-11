@@ -113,7 +113,7 @@ Mob.takeDamage = function(id, damage){
 				{ "_id": db.objectId.createFromHexString(id) },
 				{ $set: updateInstructions },
 				{ returnOriginal: false }
-			).then(response => modelHelper.serverLog('Mob.takeDamage', response))
+			).then(response => modelHelper.serverLog('Mob.takeDamage', response.value))
 			.then(response => {
 				connection.close();
 				return response;
