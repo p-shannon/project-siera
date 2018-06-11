@@ -64,15 +64,11 @@ mobsController.updateFlavor = function(req, res){
 	console.log(`DEBUG: targetProperty=${flavorProperty}`);
 	if (req.body.property){
 		Mob.update(req.params.id, flavorProperty, req.body.newValue)
-		.then(response => {
+		.then(mob => {
 			res.status(200)//
 			.json({
 				message: "Mob flavor updated successfully!",
-				mob: {
-					_id: response.value._id,
-					name: response.value.name,
-					flavor: response.value.flavor
-				}
+				mob,
 			})
 		}).catch(err => {
 			console.log(err);
