@@ -100,8 +100,14 @@ Mob.takeDamage = function(id, damage){
 		return selectedDb.collection('mobs')
 		.findOne({"_id": db.objectId.createFromHexString(id)})
 		.then(target => {
+			//Forgive me for the following 14 lines...
+			//TODO: Refactor this shit
 			let updateInstructions = {};
 			if (target.attribute.health < damage){
+				if (!target.attribute.living){
+					updateInstructions.invalidate = true;
+					damage = 0;
+				}
 				updateInstructions['attribute.living'] = false;
 			}
 			else {
@@ -115,6 +121,9 @@ Mob.takeDamage = function(id, damage){
 				{ returnOriginal: false }
 			).then(response => modelHelper.serverLog('Mob.takeDamage', response.value))
 			.then(response => {
+				if (target.attribute.health === response.attribute.health){
+					response.attackFailed = true;
+				}
 				connection.close();
 				return response;
 			})
