@@ -60,8 +60,6 @@ mobsController.create = function(req, res){
 //the flavor text
 mobsController.updateFlavor = function(req, res){
 	let flavorProperty = `flavor.${req.body.property}`;
-	console.log(`DEBUG: body.property=${req.body.property}`);
-	console.log(`DEBUG: targetProperty=${flavorProperty}`);
 	if (req.body.property){
 		Mob.update(req.params.id, flavorProperty, req.body.newValue)
 		.then(mob => {
