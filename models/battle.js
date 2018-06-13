@@ -54,5 +54,23 @@ Battle.create = function(battle){
 	})
 }
 
+//Adding combatants
+Battle.insertIntoCombatants = function(id, combatant){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('battles')
+		.findOneAndUpdate(
+			{"_id": db.objectId.createFromHexString(id)},
+			{$push: {combatants: combatant}},
+			{returnOriginal: false}
+		).then(response => modelHelper.serverLog('Battle.insertIntoCombatants', response.value))
+		.then(response => {
+			connection.close();
+			return response;
+		})
+	})
+}
+
 //Export it
 module.exports = Battle;
