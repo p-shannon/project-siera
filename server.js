@@ -33,6 +33,9 @@ server.use('/action', require('./routes/action-routes'));
 //"/log"
 server.use('/log', require('./routes/log-routes'));
 
+//"/battle"
+server.use('/battle', require('./routes/battle-routes'));
+
 //Root
 server.use('/', (req, res) => {
 	res.status(200).json({
