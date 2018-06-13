@@ -72,5 +72,29 @@ Battle.insertIntoCombatants = function(id, combatant){
 	})
 }
 
+//Confirming the presence of two combatants in the same battle
+Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('battles')
+		.find({
+			$and: [{
+				"combatants.mobId": combatantA
+				},
+				{
+				"combatants.mobId": combatantB
+				}
+			]
+		})
+		.toArray()
+		.then(response => modelHelper.serverLog('Battle.confirmCompatibleCombatants', response))
+		.then(response => {
+			connection.close();
+			return response;
+		})
+	})
+}
+
 //Export it
 module.exports = Battle;
