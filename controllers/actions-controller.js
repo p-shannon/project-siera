@@ -4,43 +4,55 @@ const Mob = require('../models/mob');
 const mobsController = require('./mobs-controller');
 ////And the log model
 const Log = require('../models/log');
+////And the battle model
+const Battle = require('../models/battle');
+
 ////Create the actions controller object
 const actionsController = {};
 
 ////Give it logic
 //attacking
 actionsController.attack = function(req, res){
-	Mob.findById(req.params.attacker)
-	.then(attacker => {
-		return Mob.takeDamage(req.params.defender, attacker.attribute.strength)
-		.then(defender => {
-			let content = "";
-			if (defender.attribute.living){
-				content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage! // ${attacker._id} =${attacker.attribute.strength}=> ${defender._id} //`;
+	Battle.confirmCompatibleCombatants(req.params.attacker, req.params.defender)
+	.then(response => {
+		if(response.length === 0){
+			let error = {
+				message: "Attack rejected: You and your target are not in a battle or in different battles."
 			}
-			else if (defender.attackFailed){
-				console.log('ERROR, CATCH!!!');
-				let error = {};
-				error.message = "Attack rejected: target is already downed and can't recieve anymore damage."
-				throw error;
-			}
-			else {
-				content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage, knocking them to the ground! // ${attacker._id} =x!${attacker.attribute.strength}!x=> ${defender._id} //`;
-			}
-			let newLog = {
-				content,
-				timestamp: Date.now(),
-				type: "action",
-				room: null
-			}
-			return Log.create(newLog)
-			.then(logResponse => {
-				res.status(200)
-				.json({
-					message: "Attack completed successfully!",
-					log: logResponse,
-					attacker,
-					defender,
+			throw error;
+		}
+		Mob.findById(req.params.attacker)
+		.then(attacker => {
+			return Mob.takeDamage(req.params.defender, attacker.attribute.strength)
+			.then(defender => {
+				let content = "";
+				if (defender.attribute.living){
+					content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage! // ${attacker._id} =${attacker.attribute.strength}=> ${defender._id} //`;
+				}
+				else if (defender.attackFailed){
+					console.log('ERROR, CATCH!!!');
+					let error = {};
+					error.message = "Attack rejected: target is already downed and can't recieve anymore damage."
+					throw error;
+				}
+				else {
+					content = `${attacker.name} attacks ${defender.name} for ${attacker.attribute.strength} damage, knocking them to the ground! // ${attacker._id} =x!${attacker.attribute.strength}!x=> ${defender._id} //`;
+				}
+				let newLog = {
+					content,
+					timestamp: Date.now(),
+					type: "action",
+					room: null
+				}
+				return Log.create(newLog)
+				.then(logResponse => {
+					res.status(200)
+					.json({
+						message: "Attack completed successfully!",
+						log: logResponse,
+						attacker,
+						defender,
+					})
 				})
 			})
 		})
