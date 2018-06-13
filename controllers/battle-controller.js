@@ -54,5 +54,20 @@ battlesController.create = function(req, res){
 	})
 }
 
+//Adding combatants to an existing battle
+battlesController.addToBattle = function(req, res){
+	Battle.insertIntoCombatants(req.params.id, req.body)
+	.then(battle => {
+		res.status(200)
+		.json({
+			message: "Combatant added to battle successfully!",
+			battle
+		})
+	}).catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	})
+}
+
 //Export the file
 module.exports = battlesController
