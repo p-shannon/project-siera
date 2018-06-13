@@ -13,5 +13,8 @@ battleRoutes.post('/', battlesController.create);
 //Get single
 battleRoutes.get('/:id', battlesController.show);
 
+//Add combatant
+battleRoutes.post('/:id', battlesController.addToBattle);
+
 //Export
 module.exports = battleRoutes
