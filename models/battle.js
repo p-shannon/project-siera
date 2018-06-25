@@ -78,14 +78,37 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('battles')
-		.find({
-			$and: [{
+		//.find({
+		//	$and: [{
+		//		"combatants.mobId": combatantA
+		//		},
+		//		{
+		//		"combatants.mobId": combatantB
+		//		}
+		//	]
+		//})
+		//.toArray()
+		.aggregate({
+			$match: { $and: [{
 				"combatants.mobId": combatantA
 				},
 				{
 				"combatants.mobId": combatantB
 				}
-			]
+			]},
+			$addFields : { "combatants": { $filter: {
+				input: "$combatants",
+				as: "combatant",
+				cond: { $or: [{
+					"$$combatant.mobId": combatantA
+					},
+					{
+					"$$combatant.mobId": combatantB
+					}
+				]}
+			}
+			}
+			}
 		})
 		.toArray()
 		.then(response => modelHelper.serverLog('Battle.confirmCompatibleCombatants', response))
