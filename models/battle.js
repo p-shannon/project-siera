@@ -95,8 +95,10 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 				{
 				"combatants.mobId": combatantB
 				}
-			]},
-			$addFields : { "combatants": { $filter: {
+			]}},
+			
+					{
+			$addFields : { "peepee": { $filter: {
 				input: "$combatants",
 				as: "combatant",
 				cond: { $or: [{
@@ -106,9 +108,9 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 					"$$combatant.mobId": combatantB
 					}
 				]}
+		
 			}
-			}
-			}
+			}}
 		})
 		.toArray()
 		.then(response => modelHelper.serverLog('Battle.confirmCompatibleCombatants', response))
