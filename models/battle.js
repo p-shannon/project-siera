@@ -90,10 +90,20 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 		//.toArray()
 		.aggregate([
 			//TODO: On confirmation, return involved mob's data to be modified.
+			//XXX: Due to poor code practices we have no reliable way to grab data from another collection
+			//     by the object id. To solve this, I'd need to change how the object ids are stored in the
+			//     database itself which would require a lot of refactoring. I'll do that later.
 			{ $match: { $and: [
 				{ "combatants.mobId": combatantA },
 				{ "combatants.mobId": combatantB }
-			]}}
+			]}}//,
+		//	{ $unwind: "$combatants" },
+		//	{ $lookup: {
+		//		from: "mobs",
+		//		localField: "combatants.mobId",
+		//		foreignField: "_id",
+		//		as: "fetchedMob"
+		//	}}
 		])
 		.toArray()
 		.then(response => modelHelper.serverLog('Battle.confirmCompatibleCombatants', response))
