@@ -88,30 +88,13 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 		//	]
 		//})
 		//.toArray()
-		.aggregate({
-			$match: { $and: [{
-				"combatants.mobId": combatantA
-				},
-				{
-				"combatants.mobId": combatantB
-				}
-			]}},
-			
-					{
-			$addFields : { "peepee": { $filter: {
-				input: "$combatants",
-				as: "combatant",
-				cond: { $or: [{
-					"$$combatant.mobId": combatantA
-					},
-					{
-					"$$combatant.mobId": combatantB
-					}
-				]}
-		
-			}
-			}}
-		})
+		.aggregate([
+			//TODO: On confirmation, return involved mob's data to be modified.
+			{ $match: { $and: [
+				{ "combatants.mobId": combatantA },
+				{ "combatants.mobId": combatantB }
+			]}}
+		])
 		.toArray()
 		.then(response => modelHelper.serverLog('Battle.confirmCompatibleCombatants', response))
 		.then(response => {
