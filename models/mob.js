@@ -102,17 +102,23 @@ Mob.takeDamage = function(id, damage){
 		.then(target => {
 			//Forgive me for the following 14 lines...
 			//TODO: Refactor this shit
+			//Create an empty object that will tell the database how to update involved parties in the future...
 			let updateInstructions = {};
+			//...If the target has less health than damage about to be inflicted...
 			if (target.attribute.health < damage){
+				//...And the target is already dead, then do nothing and tell the controller the attack failed.
 				if (!target.attribute.living){
 					updateInstructions.invalidate = true;
 					damage = 0;
 				}
+				//Otherwise set the target to 'dead'...
 				updateInstructions['attribute.living'] = false;
 			}
+			//If the target is alive and will survive the coming attack (or was dead and is being brought back to life, set the target to 'alive'...
 			else {
 				updateInstructions['attribute.living'] = true;
 			}
+			//apply the damage...
 			updateInstructions['attribute.health'] = target.attribute.health - damage;
 			return selectedDb.collection('mobs')
 			.findOneAndUpdate(
@@ -121,6 +127,7 @@ Mob.takeDamage = function(id, damage){
 				{ returnOriginal: false }
 			).then(response => modelHelper.serverLog('Mob.takeDamage', response.value))
 			.then(response => {
+				//...If the target didn't take damage then the attack failed
 				if (target.attribute.health === response.attribute.health){
 					response.attackFailed = true;
 				}
