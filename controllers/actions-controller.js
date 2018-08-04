@@ -79,11 +79,16 @@ actionsController.attack = function(req, res){
 			}
 			throw error;
 		}
-		else{
+		else {
+			//Check if the attacker has zero for a turn timer then...
+
+			//Grab both the attacker and the defender
 			promise.all([Mob.findById(req.params.attacker),Mob.findById(req.params.defender)])
 			.then(promiseResponse => {
-				//actual attack logic that included the attack used and the target's damage calculations.
+				//Deal damage based on the attacker's strength
 
+				//Then increase the attacker's turn timer by 50 - their speed
+				
 
 ////Export it.
 module.exports = actionsController;
