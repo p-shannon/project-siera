@@ -108,6 +108,32 @@ actionsController.attack = function(req, res){
 					}
 					else {
 						content = `${promiseResponse[0].name} attacks ${promiseResponse[1].name} for ${promiseResponse[0].attribute.strength} damage, knocking them to the ground!! // ${promiseResponse[0]._id} =x${promiseResponse[0].attribute.strength}x=> ${promiseResponse[1]._id} //`;
-
+					}
+					//build the log
+					let newLog = {
+						content,
+						timestamp: Date.now(),
+						type: "action",
+						room: null
+					}
+					return Log.create(newLog)
+					.then(logResponse => {
+						res.status(200)
+						.json({
+							message: "Attack completed successfully!",
+							log: logResponse,
+							attacker: promiseResponse[0],
+							defender: promiseResponse[1]
+						})
+					})
+				})
+			})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({error: err})
+			})
+		}
+	})
+}
 ////Export it.
 module.exports = actionsController;
