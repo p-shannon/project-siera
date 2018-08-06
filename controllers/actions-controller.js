@@ -79,16 +79,35 @@ actionsController.attack = function(req, res){
 			}
 			throw error;
 		}
-		else {
+		else {			
 			//Check if the attacker has zero for a turn timer then...
 
 			//Grab both the attacker and the defender
-			promise.all([Mob.findById(req.params.attacker),Mob.findById(req.params.defender)])
+			return promise.all([Mob.findById(req.params.attacker), Mob.findById(req.params.defender)])
 			.then(promiseResponse => {
 				//Deal damage based on the attacker's strength
-
-				//Then increase the attacker's turn timer by 50 - their speed
-				
+				return Mob.takeDamage(req.params.defender, promiseResponse[0].attribute.strength)
+				.then(postDamageResponse => {
+					//Check if the attack failed
+					if (postDamageResponse.attackFailed){
+						console.log('ERROR, CATCH!!!');
+						let error = {};
+						error.message = "Attack rejected: target is already downed and can't recieve anymore damage.";
+						throw error;
+					}
+					//Then increase the attacker's turn timer by 50 - their speed
+					for (combatant in response.combatants){
+						if (combatant.mobId === req.params.attacker){
+							console.log("Ding! turn count increased.");
+						}
+					}
+					//Build the log message
+					let content = "";
+					if (promiseResponse[1].attribute.living){
+						content = `${promiseResponse[0].name} attacks ${promiseResponse[1].name} for ${promiseResponse[0].attribute.strength} damage! // ${promiseResponse[0]._id} =${promiseResponse[0].attribute.strength}=> ${promiseResponse[1]._id} //`;
+					}
+					else {
+						content = `${promiseResponse[0].name} attacks ${promiseResponse[1].name} for ${promiseResponse[0].attribute.strength} damage, knocking them to the ground!! // ${promiseResponse[0]._id} =x${promiseResponse[0].attribute.strength}x=> ${promiseResponse[1]._id} //`;
 
 ////Export it.
 module.exports = actionsController;
