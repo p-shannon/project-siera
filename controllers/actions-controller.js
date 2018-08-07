@@ -126,14 +126,15 @@ actionsController.attack = function(req, res){
 							defender: promiseResponse[1]
 						})
 					})
-				})
-			})
+			
 		.catch(err => {
 			console.log(err)
 			res.status(500).json({error: err})
 			})
+			})
+			})
 		}
 	})
-}
+
 ////Export it.
 module.exports = actionsController;
