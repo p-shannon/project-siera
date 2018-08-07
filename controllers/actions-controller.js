@@ -100,10 +100,13 @@ actionsController.attack = function(req, res){
 					for (let combatant in response[0].combatants){
 						console.log('...buzz..');
 						if (response[0].combatants[combatant].mobId === req.params.attacker){
+							response[0].combatants[combatant].turnCount += 50 - (promiseResponse[0].attribute.agility * 2)
 							console.log("Ding! turn count increased.");
+							Battle.increaseTurnTimer(response[0])
 							break;
 						}
 					}
+					
 					//Build the log message
 					let content = "";
 					if (promiseResponse[1].attribute.living){
