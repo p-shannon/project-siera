@@ -75,16 +75,33 @@ actionsController.attack = function(req, res){
 	.then(response => {
 		if (response.length === 0){
 			let error = {
-				message: "characters are not in the same battle"
+				message: "Attack rejected: characters are not in the same battle"
 			}
 			throw error;
 		}
 		else {			
 			//Check if the attacker has zero for a turn timer then...
-
+			
 			//Grab both the attacker and the defender
 			return Promise.all([Mob.findById(req.params.attacker), Mob.findById(req.params.defender)])
 			.then(promiseResponse => {
+				//Then increase the attacker's turn timer by 50 - their speed
+				console.log('beep...');
+				for (let combatant in response[0].combatants){
+					console.log('...buzz..');
+					if (response[0].combatants[combatant].mobId === req.params.attacker){
+						if (response[0].combatants[combatant].turnTimer !== 0){
+							let error = {
+								message: "Attack rejected: not the character's turn"
+							}
+							throw error;
+						}
+						response[0].combatants[combatant].turnCount += 50 - (promiseResponse[0].attribute.agility * 2)
+						console.log("Ding! turn count increased.");
+						Battle.increaseTurnTimer(response[0])
+						break;
+					}
+				}
 				//Deal damage based on the attacker's strength
 				return Mob.takeDamage(req.params.defender, promiseResponse[0].attribute.strength)
 				.then(postDamageResponse => {
@@ -94,17 +111,6 @@ actionsController.attack = function(req, res){
 						let error = {};
 						error.message = "Attack rejected: target is already downed and can't recieve anymore damage.";
 						throw error;
-					}
-					//Then increase the attacker's turn timer by 50 - their speed
-					console.log('beep...');
-					for (let combatant in response[0].combatants){
-						console.log('...buzz..');
-						if (response[0].combatants[combatant].mobId === req.params.attacker){
-							response[0].combatants[combatant].turnCount += 50 - (promiseResponse[0].attribute.agility * 2)
-							console.log("Ding! turn count increased.");
-							Battle.increaseTurnTimer(response[0])
-							break;
-						}
 					}
 					
 					//Build the log message
@@ -137,7 +143,7 @@ actionsController.attack = function(req, res){
 		}
 	}).catch(err => {
 		console.log(err)
-		throw err
+		res.status(500).json(err)
 	})
 }
 
