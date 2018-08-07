@@ -83,7 +83,7 @@ actionsController.attack = function(req, res){
 			//Check if the attacker has zero for a turn timer then...
 
 			//Grab both the attacker and the defender
-			return promise.all([Mob.findById(req.params.attacker), Mob.findById(req.params.defender)])
+			return Promise.all([Mob.findById(req.params.attacker), Mob.findById(req.params.defender)])
 			.then(promiseResponse => {
 				//Deal damage based on the attacker's strength
 				return Mob.takeDamage(req.params.defender, promiseResponse[0].attribute.strength)
@@ -96,9 +96,12 @@ actionsController.attack = function(req, res){
 						throw error;
 					}
 					//Then increase the attacker's turn timer by 50 - their speed
-					for (combatant in response.combatants){
-						if (combatant.mobId === req.params.attacker){
+					console.log('beep...');
+					for (let combatant in response[0].combatants){
+						console.log('...buzz..');
+						if (response[0].combatants[combatant].mobId === req.params.attacker){
 							console.log("Ding! turn count increased.");
+							break;
 						}
 					}
 					//Build the log message
@@ -126,15 +129,14 @@ actionsController.attack = function(req, res){
 							defender: promiseResponse[1]
 						})
 					})
-			
-		.catch(err => {
-			console.log(err)
-			res.status(500).json({error: err})
-			})
-			})
+				})
 			})
 		}
+	}).catch(err => {
+		console.log(err)
+		throw err
 	})
+}
 
 ////Export it.
 module.exports = actionsController;
