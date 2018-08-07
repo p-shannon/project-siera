@@ -114,5 +114,27 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 	})
 }
 
+//Increasing a combatant's turn timer
+Battle.increaseTurnTimer = function(updatedBattle){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('battles')
+		.findOneAndUpdate(
+			{ 
+				'_id': updatedBattle._id,
+			},
+			{ $set: updatedBattle },
+			{ returnOriginal: false }
+		).then(response => modelHelper.serverLog('Battle.increaseTurnTimer', response))
+		.then(response => {
+			console.log(updatedBattle)
+			connection.close();
+			return response;
+		})
+	})
+}
+
+
 //Export it
 module.exports = Battle;
