@@ -1,8 +1,11 @@
 //Import the database
 const db = require('../db/config');
 
-//Tmport modelHelper object
+//Import modelHelper object
 const modelHelper = require('./_model-helper');
+
+//Import the mob model
+const Mob = require('./mob');
 
 //Create the battle object
 const Battle = {};
@@ -54,20 +57,46 @@ Battle.create = function(battle){
 	})
 }
 
+//Confirming the validity of a potential combatant
+Battle.confirmEligibleCombatant = function(combatantId){
+	return Mob.findById(combatantId)
+	.then(response => {
+		if (response){
+			return response.mob;
+		}
+		else {
+			return null;
+		}
+	})
+	.then(response => {
+		console.log(response);
+		return response;
+	})
+}
+
 //Adding combatants
 Battle.insertIntoCombatants = function(id, combatant){
-	return db.client.connect(db.url)
-	.then(connection => {
-		let selectedDb = connection.db(db.name);
-		return selectedDb.collection('battles')
-		.findOneAndUpdate(
-			{"_id": db.objectId.createFromHexString(id)},
-			{$push: {combatants: combatant}},
-			{returnOriginal: false}
-		).then(response => modelHelper.serverLog('Battle.insertIntoCombatants', response.value))
-		.then(response => {
-			connection.close();
-			return response;
+	return Battle.confirmEligibleCombatant(combatant.mobId)
+	.then(confirmationResponse => {
+		if (confirmationResponse === null){
+			let error = {
+				message: "Mob not found, cancelling operation."
+			}
+			throw error;
+		}
+		return db.client.connect(db.url)
+		.then(connection => {
+			let selectedDb = connection.db(db.name);
+			return selectedDb.collection('battles')
+			.findOneAndUpdate(
+				{"_id": db.objectId.createFromHexString(id)},
+				{$push: {combatants: combatant}},
+				{returnOriginal: false}
+			).then(response => modelHelper.serverLog('Battle.insertIntoCombatants', response.value))
+			.then(response => {
+				connection.close();
+				return response;
+			})
 		})
 	})
 }
@@ -134,7 +163,7 @@ Battle.update = function(updatedBattle){
 
 //Progressing the turn timers to allow the next person to go
 Battle.kickStart = function(id){
-	Battle.findById(id)
+	return Battle.findById(id)
 	.then( battle => {
 		let lowest = battle.combatants[0].turnCount;
 		console.log('finding next in line...');
