@@ -79,30 +79,44 @@ actionsController.attack = function(req, res){
 			}
 			throw error;
 		}
-		else {			
-			//Check if the attacker has zero for a turn timer then...
-			
+		else {
 			//Grab both the attacker and the defender
 			return Promise.all([Mob.findById(req.params.attacker), Mob.findById(req.params.defender)])
 			.then(promiseResponse => {
-				//Then increase the attacker's turn timer by 50 - their speed
-				console.log('beep...');
+				//Find the attacker in the battle...
 				for (let combatant in response[0].combatants){
-					console.log('...buzz..');
 					if (response[0].combatants[combatant].mobId === req.params.attacker){
-						if (response[0].combatants[combatant].turnTimer !== 0){
+						//If it's not their turn, stop the attack
+						if (response[0].combatants[combatant].turnCount !== 0){
 							let error = {
 								message: "Attack rejected: not the character's turn"
 							}
 							throw error;
 						}
+						//If it is, then we update the battle with an increased turn count for the attacker
 						response[0].combatants[combatant].turnCount += 50 - (promiseResponse[0].attribute.agility * 2)
-						console.log("Ding! turn count increased.");
-						Battle.increaseTurnTimer(response[0])
+						//Battle.update(response[0])
 						break;
 					}
 				}
-				//Deal damage based on the attacker's strength
+				//Then we find who is next in line for attacking
+				let lowest = response[0].combatants[0].turnCount;
+				console.log('finding next in line...');
+				for (let combatant in response[0].combatants){
+					if (response[0].combatants[combatant].turnCount < lowest){
+						lowest = response[0].combatants[combatant].turnCount;
+						console.log('...new lowest found...');
+					}
+				}
+				//...And finally progress everyone's turn timer
+				for (let combatant in response[0].combatants){
+					response[0].combatants[combatant].turnCount -= lowest;
+					console.log('buzz!');
+				}
+				//Apply the update
+				Battle.update(response[0])
+				
+				//Deal damage based on the attacker's strength 
 				return Mob.takeDamage(req.params.defender, promiseResponse[0].attribute.strength)
 				.then(postDamageResponse => {
 					//Check if the attack failed
