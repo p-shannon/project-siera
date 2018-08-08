@@ -114,27 +114,26 @@ Battle.confirmCompatibleCombatants = function(combatantA, combatantB){
 	})
 }
 
-//Increasing a combatant's turn timer
-Battle.increaseTurnTimer = function(updatedBattle){
+//updating a battle
+Battle.update = function(updatedBattle){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('battles')
 		.findOneAndUpdate(
-			{ 
-				'_id': updatedBattle._id,
-			},
+			{ '_id': updatedBattle._id },
 			{ $set: updatedBattle },
 			{ returnOriginal: false }
-		).then(response => modelHelper.serverLog('Battle.increaseTurnTimer', response))
+		).then(response => modelHelper.serverLog('Battle.update', response))
 		.then(response => {
-			console.log(updatedBattle)
 			connection.close();
 			return response;
 		})
 	})
 }
 
+//Progressing the turn timers to allow the next person to go
+//XXX Maybe this can be done inside the turn timer increase?
 
 //Export it
 module.exports = Battle;
