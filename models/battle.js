@@ -133,7 +133,26 @@ Battle.update = function(updatedBattle){
 }
 
 //Progressing the turn timers to allow the next person to go
-//XXX Maybe this can be done inside the turn timer increase?
+Battle.kickStart = function(id){
+	Battle.findById(id)
+	.then( battle => {
+		let lowest = battle.combatants[0].turnCount;
+		console.log('finding next in line...');
+		for (let combatant in battle.combatants){
+			if (battle.combatants[combatant].turnCount < lowest){
+				lowest = battle.combatants[combatant].turnCount;
+				console.log('...new lowest found...');
+			}
+		}
+		//...And finally progress everyone's turn timer
+		for (let combatant in battle.combatants){
+			battle.combatants[combatant].turnCount -= lowest;
+			console.log('buzz!');
+		}
+		//Apply the update
+		Battle.update(battle)
+	})
+}
 
 //Export it
 module.exports = Battle;
