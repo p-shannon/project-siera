@@ -1,8 +1,11 @@
 //Import the database
 const db = require('../db/config');
 
-//Tmport modelHelper object
+//Import modelHelper object
 const modelHelper = require('./_model-helper');
+
+//Import the mob model
+const Mob = require('./mob');
 
 //Create the battle object
 const Battle = {};
@@ -54,8 +57,35 @@ Battle.create = function(battle){
 	})
 }
 
+//Confirming the validity of a potential
+Battle.confirmEligibleCombatant = function(combatantId){
+	return Mob.findById(combatantId)
+	.then(response => {
+		if (response){
+			return response.mob;
+		}
+		else {
+			return null;
+		}
+	})
+	.then(response => {
+		console.log(response);
+		return response;
+	})
+}
+
 //Adding combatants
 Battle.insertIntoCombatants = function(id, combatant){
+	return Battle.confirmEligibleCombatant(combatant.mobId)
+	.then(confirmationResponse => {
+		console.log(confirmationResponse)
+		if (confirmationResponse === null){
+			let error = {
+				message: "Mob not found, cancelling operation."
+			}
+			throw error;
+		}
+	Battle.confirmEligibleCombatant(combatant.mobId).then(test => {console.log(test)})
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
@@ -70,6 +100,8 @@ Battle.insertIntoCombatants = function(id, combatant){
 			return response;
 		})
 	})
+
+})
 }
 
 //Confirming the presence of two combatants in the same battle
@@ -134,7 +166,7 @@ Battle.update = function(updatedBattle){
 
 //Progressing the turn timers to allow the next person to go
 Battle.kickStart = function(id){
-	Battle.findById(id)
+	return Battle.findById(id)
 	.then( battle => {
 		let lowest = battle.combatants[0].turnCount;
 		console.log('finding next in line...');
