@@ -48,7 +48,8 @@ Battle.findByCombatant = function(combatantId){
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('battles')
-		findOne({"combatants.mobId": combatantId})
+		find({"combatants.mobId": combatantId})
+		.toArray()
 		.then(response => modelHelper.serverLog('Battle.findByCombatant', response))
 		.then(response => {
 			connection.close();
@@ -99,18 +100,27 @@ Battle.insertIntoCombatants = function(id, combatant){
 			}
 			throw error;
 		}
-		return db.client.connect(db.url)
-		.then(connection => {
-			let selectedDb = connection.db(db.name);
-			return selectedDb.collection('battles')
-			.findOneAndUpdate(
-				{"_id": db.objectId.createFromHexString(id)},
-				{$push: {combatants: combatant}},
-				{returnOriginal: false}
-			).then(response => modelHelper.serverLog('Battle.insertIntoCombatants', response.value))
-			.then(response => {
-				connection.close();
-				return response;
+		return Battle.findByCombatant(combatant.mobId)
+		.then(combatantConfirmationResponse => {
+			if	(combatantConfirmationResponse.length == 0){
+				let error = {
+					message: "Mob already in a battle, cancelling operation."
+				}
+				throw error;
+			}
+			return db.client.connect(db.url)
+			.then(connection => {
+				let selectedDb = connection.db(db.name);
+				return selectedDb.collection('battles')
+				.findOneAndUpdate(
+					{"_id": db.objectId.createFromHexString(id)},
+					{$push: {combatants: combatant}},
+					{returnOriginal: false}
+				).then(response => modelHelper.serverLog('Battle.insertIntoCombatants', response.value))
+				.then(response => {
+					connection.close();
+					return response;
+				})
 			})
 		})
 	})
