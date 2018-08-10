@@ -42,6 +42,22 @@ Battle.findById = function(id){
 	})
 }
 
+//finding a single battle by combatant
+Battle.findByCombatant = function(combatantId){
+	return db.client.connect(db.url)
+	.then(connection => {
+		let selectedDb = connection.db(db.name);
+		return selectedDb.collection('battles')
+		findOne({"combatants.mobId": combatantId})
+		.then(response => modelHelper.serverLog('Battle.findByCombatant', response))
+		.then(response => {
+			connection.close();
+			return response;
+		})
+	})
+}
+
+
 //creating a single battle
 Battle.create = function(battle){
 	return db.client.connect(db.url)
