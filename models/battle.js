@@ -57,7 +57,6 @@ Battle.findByCombatant = function(combatantId){
 	})
 }
 
-
 //creating a single battle
 Battle.create = function(battle){
 	return db.client.connect(db.url)
