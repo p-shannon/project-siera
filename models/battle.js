@@ -42,13 +42,13 @@ Battle.findById = function(id){
 	})
 }
 
-//finding a single battle by combatant
+//Finding a single battle by combatant
 Battle.findByCombatant = function(combatantId){
 	return db.client.connect(db.url)
 	.then(connection => {
 		let selectedDb = connection.db(db.name);
 		return selectedDb.collection('battles')
-		find({"combatants.mobId": combatantId})
+		.find({"combatants.mobId": combatantId})
 		.toArray()
 		.then(response => modelHelper.serverLog('Battle.findByCombatant', response))
 		.then(response => {
@@ -102,7 +102,7 @@ Battle.insertIntoCombatants = function(id, combatant){
 		}
 		return Battle.findByCombatant(combatant.mobId)
 		.then(combatantConfirmationResponse => {
-			if	(combatantConfirmationResponse.length == 0){
+			if (combatantConfirmationResponse.length){
 				let error = {
 					message: "Mob already in a battle, cancelling operation."
 				}
